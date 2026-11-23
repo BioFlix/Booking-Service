@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: booking-service
+  labels:
+    app: bioflix
+    service: booking-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: booking-service
+  template:
+    metadata:
+      labels:
+        app: bioflix
+        service: booking-service
+    spec:
+      containers:
+        - name: booking-service
+          # Docker Hub image pushed by .github/workflows/ci.yml (same Docker Hub account as catalog-service)
+          image: tmil24/booking-service:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8083
+          env:
+            - name: DB_HOST
+              value: booking-postgres
+            - name: DB_NAME
+              value: bookings_db
+            - name: DB_USER
+              value: postgres
+            - name: DB_PASSWORD
+              value: postgres
+            # The shared broker from the Infrastructure repo (Service name "rabbitmq")
+            - name: RABBITMQ_HOST
+              value: rabbitmq
+            # gRPC to catalog-service (see Catalog-Service/kubernetes/catalog-service/service.yaml)
+            - name: CATALOG_GRPC_HOST
+              value: catalog-service
+            - name: CATALOG_GRPC_PORT
+              value: "9090"
+            - name: BOOKING_HOLD_MINUTES
+              value: "15"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8083
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8083
+            initialDelaySeconds: 45
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 768Mi

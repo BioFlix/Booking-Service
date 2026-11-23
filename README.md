@@ -69,3 +69,14 @@ Lytter på kø `booking-service.payment-events` (idempotent via `processed_event
 ## CI
 `.github/workflows/ci.yml` kører testene og pusher `<DOCKERHUB_USERNAME>/booking-service:latest` til Docker Hub
 på `main`. Kræver repo-secrets `DOCKERHUB_USERNAME` og `DOCKERHUB_TOKEN`.
+
+## Kubernetes (Docker Desktop)
+`kubernetes/booking-service` (Deployment + ClusterIP Service på 8083) og `kubernetes/booking-postgres`
+(Postgres 17 med en PersistentVolumeClaim på 1 Gi). Imaget hentes fra Docker Hub (`tmil24/booking-service:latest`).
+
+Forventer, at disse allerede kører i klusteret: `rabbitmq` (Infrastructure-repoet) og `catalog-service`.
+```
+kubectl apply -R -f kubernetes
+kubectl get pods
+kubectl logs deploy/booking-service
+```
