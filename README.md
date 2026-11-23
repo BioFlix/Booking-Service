@@ -72,7 +72,7 @@ på `main`. Kræver repo-secrets `DOCKERHUB_USERNAME` og `DOCKERHUB_TOKEN`.
 
 ## Kubernetes (Docker Desktop)
 `kubernetes/booking-service` (Deployment + ClusterIP Service på 8083) og `kubernetes/booking-postgres`
-(Postgres 17 med en PersistentVolumeClaim på 1 Gi). Imaget hentes fra Docker Hub (`tmil24/booking-service:latest`).
+(Postgres 17 med en PersistentVolumeClaim på 1 Gi). Imaget hentes fra Docker Hub (`umairtafail/booking-service:latest`).
 
 Forventer, at disse allerede kører i klusteret: `rabbitmq` (Infrastructure-repoet) og `catalog-service`.
 ```

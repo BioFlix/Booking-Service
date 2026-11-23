@@ -18,8 +18,8 @@ spec:
     spec:
       containers:
         - name: booking-service
-          # Docker Hub image pushed by .github/workflows/ci.yml (same Docker Hub account as catalog-service)
-          image: tmil24/booking-service:latest
+          # Docker Hub image pushed by .github/workflows/ci.yml (your Docker Hub account – must match DOCKERHUB_USERNAME in CI)
+          image: umairtafail/booking-service:latest
           imagePullPolicy: Always
           ports:
             - name: http
